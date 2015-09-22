@@ -2,7 +2,10 @@
 
 use Symfony\Component\ClassLoader\ApcClassLoader;
 use Symfony\Component\HttpFoundation\Request;
+<<<<<<< HEAD
 
+=======
+>>>>>>> 1.5.3
 $loader = require_once __DIR__.'/../app/bootstrap.php.cache';
 
 // Enable APC for autoloading to improve performance.
@@ -14,7 +17,10 @@ $apcLoader = new ApcClassLoader(sha1(__FILE__), $loader);
 $loader->unregister();
 $apcLoader->register(true);
 */
+<<<<<<< HEAD
 umask(0002);
+=======
+>>>>>>> 1.5.3
 
 require_once __DIR__.'/../app/AppKernel.php';
 //require_once __DIR__.'/../app/AppCache.php';

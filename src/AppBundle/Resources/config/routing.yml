@@ -1,3 +1,12 @@
+<<<<<<< HEAD
 app:
   path: "/app/example"
   defaults: {_controller: AppBundle:Default:index}
+=======
+app_category:
+    prefix: /category
+    resource: "@AppBundle/Resources/config/category.yml"
+app_product:
+    prefix: /product
+    resource: "@AppBundle/Resources/config/product.yml"
+>>>>>>> 1.5.3

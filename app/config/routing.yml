@@ -1,2 +1,6 @@
 app:
+<<<<<<< HEAD
   resource: "@AppBundle/Resources/config/routing.yml"
+=======
+    resource: "@AppBundle/Resources/config/routing.yml"
+>>>>>>> 1.5.3

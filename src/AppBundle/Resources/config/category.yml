@@ -1,0 +1,15 @@
+category_list_json:
+    path: /list
+    defaults: { _controller: AppBundle:Category:listCategoriesJson}
+    condition: "request.headers.get('Content-Type') == 'application/json'"
+category_list:
+    path: /list
+    defaults: { _controller: AppBundle:Category:listCategories}
+category_edit:
+    path: /edit/{categoryId}
+    defaults: { _controller: AppBundle:Category:editCategory, categoryId:0}
+    methods:  [GET]
+category_save:
+    path: /edit/{categoryId}
+    defaults: { _controller: AppBundle:Category:saveCategory, categoryId:0}
+    methods:  [POST]

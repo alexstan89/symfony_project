@@ -10,5 +10,8 @@
 /vendor/
 /bin/
 /composer.phar
+<<<<<<< HEAD
 UPGRADE*
 LICENSE
+=======
+>>>>>>> 1.5.3
