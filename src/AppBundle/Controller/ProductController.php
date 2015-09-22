@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Service\ProductService;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 class ProductController extends Controller
@@ -30,21 +31,14 @@ class ProductController extends Controller
 
     private function getProducts()
     {
-        return array(
-            1 => array('id' => 1, 'title' => 'Padfone2', 'code' => 'padfone2', 'description' => 'an awesome padfone'),
-            2 => array('id' => 2, 'title' => 'Gforce 750x df-15', 'code' => 'gforce750xdf15', 'description' => 'an awesome graphic card'),
-            3 => array('id' => 3, 'title' => 'Acer aspire 25147', 'code' => 'aceraspire25147', 'description' => 'an awesome laptop'),
-            4 => array('id' => 4, 'title' => 'Allview T-152 2Gb', 'code' => 'allviewt1522gb', 'description' => 'an awesome tablet'),
-        );
+        $productService = $this->container->get(ProductService::ID);
+        return $productService->getProducts();
     }
 
     private function getProduct($productId)
     {
-        $products = $this->getProducts();
-        if (empty($products[$productId])) {
-            throw new \Exception(sprintf('Invalid productId %s', $productId));
-        }
-        return $products[$productId];
+        $productService = $this->container->get(ProductService::ID);
+        return $productService->getProduct($productId);
     }
 
 }

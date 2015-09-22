@@ -5,8 +5,12 @@ app:
 =======
 app_category:
     prefix: /category
-    resource: "@AppBundle/Resources/config/category.yml"
+    resource: "@AppBundle/Resources/config/routing/category.yml"
 app_product:
     prefix: /product
+<<<<<<< HEAD
     resource: "@AppBundle/Resources/config/product.yml"
 >>>>>>> 1.5.3
+=======
+    resource: "@AppBundle/Resources/config/routing/product.yml"
+>>>>>>> github/2.3

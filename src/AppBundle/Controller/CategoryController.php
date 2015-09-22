@@ -2,8 +2,12 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Entity\Category;
+use AppBundle\Form\Type\CategoryType;
+use AppBundle\Service\CategoryService;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 
 class CategoryController extends Controller
 {
@@ -14,54 +18,66 @@ class CategoryController extends Controller
         return $this->render('AppBundle:category:list.html.twig', $arguments);
     }
 
-    public function listCategoriesJsonAction()
+    public function listCategoriesJsonAction(Request $r)
     {
         return new JsonResponse($this->getCategories());
     }
 
-    public function editCategoryAction($categoryId)
+    public function editCategoryAction(Request $request, $categoryId)
     {
         try {
             $category = $this->getCategory($categoryId);
         } catch (\Exception $exception) {
             throw $this->createNotFoundException($exception->getMessage(), $exception);
         }
-        $arguments = array(
-            'category' => $category,
-            'categories' => $this->getCategories()
-        );
-        return $this->render('AppBundle:category:edit.html.twig', $arguments);
+        $form = $this->createCategoryEditForm($category);
+
+        return $this->render('AppBundle:category:edit.html.twig', array(
+                    'entity' => $category,
+                    'edit_form' => $form->createView(),
+        ));
     }
 
-    public function saveCategoryAction($categoryId)
+    public function saveCategoryAction(Request $request, $categoryId)
     {
-        return $this->redirectToRoute('category_list');
+        try {
+            $category = $this->getCategory($categoryId);
+        } catch (\Exception $exception) {
+            throw $this->createNotFoundException($exception->getMessage(), $exception);
+        }
+        $form = $this->createCategoryEditForm($category);
+
+        $form->handleRequest($request);
+
+        if ($form->isValid()) {
+            $this->getDoctrine()->getManager()->flush();
+            return $this->redirect(
+                            $this->generateUrl('category_edit', array('categoryId' => $categoryId))
+            );
+        }
+        throw new \Exception($form->getErrors(true)->current()->getMessage());
+    }
+
+    private function createCategoryEditForm(Category $category)
+    {
+        return $this->createForm(new CategoryType(), $category, array(
+                    'action' => $this->generateUrl(
+                            'category_edit', array('categoryId' => $category->getId())
+                    ),
+                    'method' => 'POST',
+        ));
     }
 
     private function getCategories()
     {
-        return array(
-            1 => array('id' => 1, 'label' => 'Phones', 'parent' => null),
-            2 => array('id' => 2, 'label' => 'Computers', 'parent' => null),
-            3 => array('id' => 3, 'label' => 'Tablets', 'parent' => null),
-            4 => array('id' => 4, 'label' => 'Desktop', 'parent' => array(
-                    'id' => 2,
-                    'label' => 'Computers')
-            ),
-            5 => array('id' => 5, 'label' => 'Laptop', 'parent' => array(
-                    'id' => 2,
-                    'label' => 'Computers')
-            ),
-        );
+        $categoryService = $this->container->get(CategoryService::ID);
+        return $categoryService->getCategories();
     }
 
     private function getCategory($categoryId)
     {
-        $categories = $this->getCategories();
-        if (empty($categories[$categoryId])) {
-            throw new \Exception(sprintf('Invalid categoryId %s', $categoryId));
-        }
-        return $categories[$categoryId];
+        $categoryService = $this->container->get(CategoryService::ID);
+        return $categoryService->getCategory($categoryId);
     }
 
 }
